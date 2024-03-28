@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """A script that reads stdin line by line and computes metrics"""
 
 
@@ -10,6 +10,7 @@ def print_metrics(total_size, status_codes):
     print(f'Total file size: {total_size}')
     for code, count in sorted(status_codes.items()):
         print(f'{code}: {count}')
+
 
 def parse_line(line):
     '''Parses the line and extracts IP Address, status code, and file size.'''
@@ -44,4 +45,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
