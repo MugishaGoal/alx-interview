@@ -18,11 +18,11 @@ def extract_input(input_line):
         'status_code': 0,
         'file_size': 0,
     }
-    log_fmt = '{}\\-{}{}{}{}\\s*'.format(fp[0], fp[1], fp[2], fp[3], fp[4])
-    resp_match = re.fullmatch(log_fmt, input_line)
-    if resp_match is not None:
-        status_code = resp_match.group('status_code')
-        file_size = int(resp_match.group('file_size'))
+    log_format = '{}\\-{}{}{}{}\\s*'.format(fp[0], fp[1], fp[2], fp[3], fp[4])
+    respo_match = re.fullmatch(log_format, input_line)
+    if respo_match is not None:
+        status_code = respo_match.group('status_code')
+        file_size = int(respo_match.group('file_size'))
         info['status_code'] = status_code
         info['file_size'] = file_size
     return info
@@ -51,7 +51,7 @@ def update_metrics(line, total_file_size, status_codes_stats):
 def start():
     '''Starts the log parser
     '''
-    line_num = 0
+    line_n = 0
     total_file_size = 0
     status_codes_stats = {
         '200': 0,
@@ -71,8 +71,8 @@ def start():
                 total_file_size,
                 status_codes_stats,
             )
-            line_num += 1
-            if line_num % 10 == 0:
+            line_n += 1
+            if line_n % 10 == 0:
                 print_statistics(total_file_size, status_codes_stats)
     except (KeyboardInterrupt, EOFError):
         print_statistics(total_file_size, status_codes_stats)
