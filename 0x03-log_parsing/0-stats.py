@@ -1,13 +1,14 @@
 #!/usr/bin/python3
-'''HTTP request log parser and statistics calculator.
-'''
+"""A script that reads stdin line by line and computes metrics by
+HTTP request log parser and statistics calculator
+"""
+
+
 import re
-import sys
 
 
 def extract_input(input_line):
-    '''Extracts sections of an HTTP request log line.
-    '''
+    """Extracts sections of a line of an HTTP request"""
     fp = (
         r'\s*(?P<ip>\S+)\s*',
         r'\s*\[(?P<date>\d+\-\d+\-\d+ \d+:\d+:\d+\.\d+)\]',
@@ -30,19 +31,16 @@ def extract_input(input_line):
 
 
 def print_statistics(total_file_size, status_codes_stats):
-    '''Prints accumulated statistics from the HTTP request log.
-    '''
-    print('Total file size: {:d}'.format(total_file_size), flush=True)
+    """Prints statistics of the HTTP request log"""
+    print('File size: {:d}'.format(total_file_size), flush=True)
     for status_code in sorted(status_codes_stats.keys()):
         num = status_codes_stats.get(status_code, 0)
         if num > 0:
-            print('Number of lines with status code {:s}: {:d}'.format(
-                status_code, num), flush=True)
+            print('{:s}: {:d}'.format(status_code, num), flush=True)
 
 
 def update_metrics(line, total_file_size, status_codes_stats):
-    '''Updates metrics from a given HTTP request log
-    '''
+    """Updates the metrics from a HTTP request log"""
     line_info = extract_input(line)
     status_code = line_info.get('status_code', '0')
     if status_code in status_codes_stats.keys():
@@ -50,9 +48,8 @@ def update_metrics(line, total_file_size, status_codes_stats):
     return total_file_size + line_info['file_size']
 
 
-def run():
-    '''Starts the HTTP request log parser and statistics calculator.
-    '''
+def start():
+    """Starts the log parser"""
     line_num = 0
     total_file_size = 0
     status_codes_stats = {
@@ -81,4 +78,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    start()
