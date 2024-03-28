@@ -37,7 +37,7 @@ def main():
             404: 0,
             405: 0,
             500: 0
-            }
+    }
     try:
         for i, line in enumerate(sys.stdin, start=1):
             ip_address, code, file_size = parse_line(line)
