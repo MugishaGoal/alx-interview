@@ -48,7 +48,7 @@ def update_metrics(line, total_file_size, status_codes_stats):
     return total_file_size + line_info['file_size']
 
 
-def start():
+def run():
     """Starts the log parser"""
     line_num = 0
     total_file_size = 0
@@ -78,4 +78,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    run()
