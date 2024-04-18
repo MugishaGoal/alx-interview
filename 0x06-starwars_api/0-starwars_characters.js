@@ -1,25 +1,43 @@
 #!/usr/bin/node
 
-const axios = require('axios');
-
-async function getMovieCharacters(movieId) {
-    try {
-        const response = await axios.get(`https://swapi.dev/api/films/${movieId}/`);
-        const characters = response.data.characters;
-
-        for (const characterUrl of characters) {
-            const characterResponse = await axios.get(characterUrl);
-            console.log(characterResponse.data.name);
-        }
-    } catch (error) {
-        console.error("Error:", error.message);
-    }
-}
+const request = require('request');
+const API_URL = 'https://swapi.dev/api';
 
 if (process.argv.length !== 3) {
-    console.log("Usage: node script.js <movie_id>");
+    console.log('Usage: ./script.js <movie_id>');
     process.exit(1);
 }
 
 const movieId = process.argv[2];
-getMovieCharacters(movieId);
+
+request(`${API_URL}/films/${movieId}/`, (err, _, body) => {
+    if (err) {
+        console.error('Error:', err);
+        process.exit(1);
+    }
+
+    const charactersURL = JSON.parse(body).characters;
+
+    const getCharacterName = url => {
+        return new Promise((resolve, reject) => {
+            request(url, (err, _, body) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(JSON.parse(body).name);
+            });
+        });
+    };
+
+    const characterNamePromises = charactersURL.map(getCharacterName);
+
+    Promise.all(characterNamePromises)
+        .then(names => {
+            console.log(names.join('\n'));
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            process.exit(1);
+        });
+});
