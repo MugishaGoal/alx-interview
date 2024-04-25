@@ -2,13 +2,7 @@
 
 def rotate_2d_matrix(matrix):
     """
-    Rotate a 2D matrix 90 degrees clockwise in-place.
-
-    Args:
-        matrix (list of list): The input matrix to be rotated. Must be a square matrix.
-
-    Returns:
-        None: The function modifies the input matrix in-place and does not return anything.
+    Rotate a 2D matrix 90 degrees clockwise in-place
     """
     n = len(matrix)
 
