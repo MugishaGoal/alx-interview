@@ -52,10 +52,5 @@ def isWinner(x, nums):
     if maria_wins > ben_wins:
         return "Maria"
     elif ben_wins > maria_wins:
-        return "Ben"
-    else:
         return None
-
-# Test case
-print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
 
