@@ -1,56 +1,42 @@
 #!/usr/bin/python3
-"""determine who the winner of each game is"""
 
-
-def sieve(n):
-    is_prime = [True] * (n + 1)
-    p = 2
-    while (p * p <= n):
-        if (is_prime[p] == True):
-            for i in range(p * p, n + 1, p):
-                is_prime[i] = False
-        p += 1
-    prime_list = []
-    for p in range(2, n + 1):
-        if is_prime[p]:
-            prime_list.append(p)
-    return prime_list
-
-def simulate_game(n, primes):
-    available = [True] * (n + 1)
-    turn = 0  # 0 for Maria, 1 for Ben
-    
-    while True:
-        move_made = False
-        for prime in primes:
-            if prime <= n and available[prime]:
-                move_made = True
-                for multiple in range(prime, n + 1, prime):
-                    available[multiple] = False
-                break
-        if not move_made:
-            return 1 - turn  # the other player wins
-        turn = 1 - turn
 
 def isWinner(x, nums):
-    if x <= 0 or not nums:
+    """Determines the winner of a prime game session with `x` rounds.
+    """
+    if x < 1 or not nums:
         return None
 
-    max_n = max(nums)
-    primes = sieve(max_n)
+    # Determine the maximum number to generate primes up to
+    n = max(nums)
 
-    maria_wins = 0
-    ben_wins = 0
+    # Sieve of Eratosthenes to generate prime numbers up to n
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False  # 0 and 1 are not prime numbers
 
-    for n in nums:
-        winner = simulate_game(n, primes)
-        if winner == 0:
-            maria_wins += 1
+    for i in range(2, int(n**0.5) + 1):
+        if is_prime[i]:
+            for j in range(i*i, n + 1, i):
+                is_prime[j] = False
+
+    # Prime counts up to each index
+    prime_count = [0] * (n + 1)
+    for i in range(1, n + 1):
+        prime_count[i] = prime_count[i - 1] + (1 if is_prime[i] else 0)
+
+    marias_wins, bens_wins = 0, 0
+
+    # Determine the winner for each round
+    for round_n in nums:
+        if prime_count[round_n] % 2 == 1:
+            marias_wins += 1
         else:
-            ben_wins += 1
+            bens_wins += 1
 
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
+    # Determine the overall winner
+    if marias_wins > bens_wins:
+        return 'Maria'
+    elif bens_wins > marias_wins:
+        return 'Ben'
+    else:
         return None
-
