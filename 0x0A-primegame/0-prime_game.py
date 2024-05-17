@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""""
+"""determine who the winner of each game is"""
 
 
 def sieve(n):
